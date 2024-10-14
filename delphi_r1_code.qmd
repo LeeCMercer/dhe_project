@@ -1,0 +1,483 @@
+---
+title: "Delphi Round 1 - R Code"
+format: html
+editor: visual
+---
+
+## 0. Data tidying
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
+```
+
+### Load libraries
+
+```{r}
+library(tidyverse) # Load tidyverse
+library(dplyr)
+library(ggplot2)
+```
+
+### Load data
+
+```{r}
+data <- read.csv("data/raw_data.csv")
+```
+
+### Tidy data
+
+#### Recode values
+
+```{r}
+data$edu_att <- recode(data$edu_att,
+  "School-level (GCSEs, CSEs, O-Levels, or equivalent)" = "School level",
+  "Further education (A-Level, NVQ, Scottish Highers, or equivalent)" = "Further education",
+  "Vocational and technical (NVQ Level 1 and 2, BTEC, Apprenticeships, or equivalent)" = "Vocational and technical",
+  "Higher education (HNC, HND, Foundational Degree, or equivalent)" = "Higher education",
+  "Undergraduate Degree (BA, BSc, BEng, or equivalent)" = "Undergraduate degree",
+  "Postgraduate and professional (MA, MSc, MBA, PhD, or equivalent)" = "Postgraduate and professional"
+)
+```
+
+## 1. Initial Descriptive Statistics
+
+::: callout-note
+**Purpose** To provide an overview of the expert panel's demographics and responses across key domains of digital health enablement.
+:::
+
+### Variables
+
+-   Gender
+-   Ethnicity
+-   Occupation/sector
+-   Years of experience
+-   Digital health enablement domains (e.g., digital competencies, digital health literacy).
+
+### Methods
+
+1.  Calculate **frequencies** and **percentages** for categorical variables (e.g., gender, occupation).
+2.  Compute **mean** and **standard deviation** for continuous variables (e.g., years of experience, item ratings).
+3.  Provide the **distribution of scores** across the different digital health enablement sub-domains to summarise initial participant responses.
+
+### Demographic report
+
+#### Gender
+
+```{r}
+count(data, gen_grp)
+```
+
+```{r}
+# Step 1: Summarize the counts by gender group
+gender_counts <- data %>%
+  group_by(gen_grp) %>%
+  summarise(Count = n())  # Count the frequency of each gender group
+
+# Step 2: Create the horizontal bar chart with whole number labels on the y-axis
+ggplot(gender_counts, aes(x = gen_grp, y = Count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = "Demographic Distribution by Gender Group", x = "Gender Group", y = "Count") +
+  scale_y_continuous(breaks = seq(0, max(gender_counts$Count), by = 1)) +  # Set y-axis to display whole numbers
+  theme_minimal()
+```
+
+#### Ethnicity
+
+```{r}
+count(data, eth_grp)
+```
+
+```{r}
+# Step 1: Summarize the counts by gender group
+gender_counts <- data %>%
+  group_by(eth_grp) %>%
+  summarise(Count = n())  # Count the frequency of each gender group
+
+# Step 2: Create the horizontal bar chart with whole number labels on the y-axis
+ggplot(gender_counts, aes(x = eth_grp, y = Count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = "Demographic Distribution by Ethnic Group", x = "Ethnic Group", y = "Count") +
+  scale_y_continuous(breaks = seq(0, max(gender_counts$Count), by = 1)) +  # Set y-axis to display whole numbers
+  theme_minimal()
+```
+
+#### Educational attainment
+
+```{r}
+count(data, edu_att)
+```
+
+```{r}
+# Step 1: Summarize the counts by gender group
+gender_counts <- data %>%
+  group_by(edu_att) %>%
+  summarise(Count = n())  # Count the frequency of each gender group
+
+# Step 2: Create the horizontal bar chart with whole number labels on the y-axis
+ggplot(gender_counts, aes(x = edu_att, y = Count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = "Demographic Distribution by Educational Attainment", x = "Educational Attainment", y = "Count") +
+  scale_y_continuous(breaks = seq(0, max(gender_counts$Count), by = 1)) +  # Set y-axis to display whole numbers
+  theme_minimal()
+```
+
+#### Employment sector
+
+```{r}
+count(data, emp_sec)
+```
+
+```{r}
+# Step 1: Summarize the counts by gender group
+gender_counts <- data %>%
+  group_by(emp_sec) %>%
+  summarise(Count = n())  # Count the frequency of each gender group
+
+# Step 2: Create the horizontal bar chart with whole number labels on the y-axis
+ggplot(gender_counts, aes(x = emp_sec, y = Count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = "Demographic Distribution by Employment Type", x = "Employment Type", y = "Count") +
+  scale_y_continuous(breaks = seq(0, max(gender_counts$Count), by = 1)) +  # Set y-axis to display whole numbers
+  theme_minimal()
+```
+
+### Mean item scores
+
+#### Sub-construct 1: Digital Skills
+
+The distribution of digital skills scores reveals critical insights into the **varying levels of digital competency** among participants. Notably, the higher scores in **Items 01** and **05** indicate strong proficiency in basic digital tasks, while lower scores in **Items 10** and **12** highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.
+
+```{r, echo=FALSE}
+# Step 1: Calculate mean scores for the variables of interest with descriptive names
+mean_scores <- data %>%
+  summarise(
+    "Item 1.1" = mean(dsk_01, na.rm = TRUE),
+    "Item 1.2" = mean(dsk_02, na.rm = TRUE),
+    "Item 1.3" = mean(dsk_03, na.rm = TRUE),
+    "Item 1.4" = mean(dsk_04, na.rm = TRUE),
+    "Item 1.5" = mean(dsk_05, na.rm = TRUE),
+    "Item 1.6" = mean(dsk_06, na.rm = TRUE),
+    "Item 1.7" = mean(dsk_07, na.rm = TRUE),
+    "Item 1.8" = mean(dsk_08, na.rm = TRUE),
+    "Item 1.9" = mean(dsk_09, na.rm = TRUE),
+    "Item 1.10" = mean(dsk_10, na.rm = TRUE),
+    "Item 1.11" = mean(dsk_11, na.rm = TRUE),
+    "Item 1.12" = mean(dsk_12, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "MeanScore")  # Reshape data
+
+# Step 3: Create the horizontal bar chart for mean scores in reversed order
+ggplot(mean_scores, aes(x = factor(Variable, levels = rev(c("Item 1.1", "Item 1.2", "Item 1.3", "Item 1.4", "Item 1.5", "Item 1.6", "Item 1.7", "Item 1.8", "Item 1.9", "Item 1.10", "Item 1.11", "Item 1.12"))), y = MeanScore)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = NULL, x = NULL, y = NULL) +  # Set x and y labels to NULL
+  scale_y_continuous(breaks = seq(0, 9, by = 1)) +  # Set y-axis to display whole numbers from 0 to 9
+  theme_minimal() + 
+  theme(axis.text.x = element_text(size = 12),  # Keep x-axis text (variable names)
+        axis.text.y = element_text(size = 12),  # Keep y-axis text (mean scores)
+        axis.title.x = element_text(size = 14),  # Customize x-axis title
+        axis.title.y = element_text(size = 14))  # Customize y-axis title
+```
+**Figure 5** Mean scores for items related to **Digital Skills**.
+  
+#### Sub-construct 2: Digital Health Literacy
+
+The distribution of digital skills scores reveals critical insights into the **varying levels of digital competency** among participants. Notably, the higher scores in **Items 01** and **05** indicate strong proficiency in basic digital tasks, while lower scores in **Items 10** and **12** highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.
+
+```{r, echo=FALSE}
+# Step 1: Calculate mean scores for the variables of interest with descriptive names
+mean_scores <- data %>%
+  summarise(
+    "Item 2.1" = mean(dhl_01, na.rm = TRUE),
+    "Item 2.2" = mean(dhl_02, na.rm = TRUE),
+    "Item 2.3" = mean(dhl_03, na.rm = TRUE),
+    "Item 2.4" = mean(dhl_04, na.rm = TRUE),
+    "Item 2.5" = mean(dhl_05, na.rm = TRUE),
+    "Item 2.6" = mean(dhl_06, na.rm = TRUE),
+    "Item 2.7" = mean(dhl_07, na.rm = TRUE),
+    "Item 2.8" = mean(dhl_08, na.rm = TRUE),
+    "Item 2.9" = mean(dhl_09, na.rm = TRUE),
+    "Item 2.10" = mean(dhl_10, na.rm = TRUE),
+    "Item 2.11" = mean(dhl_11, na.rm = TRUE),
+    "Item 2.12" = mean(dhl_12, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "MeanScore")  # Reshape data
+
+# Step 3: Create the horizontal bar chart for mean scores in reversed order
+ggplot(mean_scores, aes(x = factor(Variable, levels = rev(c("Item 2.1", "Item 2.2", "Item 2.3", "Item 2.4", "Item 2.5", "Item 2.6", "Item 2.7", "Item 2.8", "Item 2.9", "Item 2.10", "Item 2.11", "Item 2.12"))), y = MeanScore)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = NULL, x = NULL, y = NULL) +  # Set x and y labels to NULL
+  scale_y_continuous(breaks = seq(0, 9, by = 1)) +  # Set y-axis to display whole numbers from 0 to 9
+  theme_minimal() + 
+  theme(axis.text.x = element_text(size = 12),  # Keep x-axis text (variable names)
+        axis.text.y = element_text(size = 12),  # Keep y-axis text (mean scores)
+        axis.title.x = element_text(size = 14),  # Customize x-axis title
+        axis.title.y = element_text(size = 14))  # Customize y-axis title
+```
+**Figure 6** Mean scores for items related to **Digital Health Literacy**.
+
+#### Sub construct 3: Digital Self-Efficacy
+
+The distribution of digital skills scores reveals critical insights into the **varying levels of digital competency** among participants. Notably, the higher scores in **Items 01** and **05** indicate strong proficiency in basic digital tasks, while lower scores in **Items 10** and **12** highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.
+
+```{r, echo=FALSE}
+# Step 1: Calculate mean scores for the variables of interest with descriptive names
+mean_scores <- data %>%
+  summarise(
+    "Item 3.1" = mean(dse_01, na.rm = TRUE),
+    "Item 3.2" = mean(dse_02, na.rm = TRUE),
+    "Item 3.3" = mean(dse_03, na.rm = TRUE),
+    "Item 3.4" = mean(dse_04, na.rm = TRUE),
+    "Item 3.5" = mean(dse_05, na.rm = TRUE),
+    "Item 3.6" = mean(dse_06, na.rm = TRUE),
+    "Item 3.7" = mean(dse_07, na.rm = TRUE),
+    "Item 3.8" = mean(dse_08, na.rm = TRUE),
+    "Item 3.9" = mean(dse_09, na.rm = TRUE),
+    "Item 3.10" = mean(dse_10, na.rm = TRUE),
+    "Item 3.11" = mean(dse_11, na.rm = TRUE),
+    "Item 3.12" = mean(dse_12, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "MeanScore")  # Reshape data
+
+# Step 3: Create the horizontal bar chart for mean scores in reversed order
+ggplot(mean_scores, aes(x = factor(Variable, levels = rev(c("Item 3.1", "Item 3.2", "Item 3.3", "Item 3.4", "Item 3.5", "Item 3.6", "Item 3.7", "Item 3.8", "Item 3.9", "Item 3.10", "Item 3.11", "Item 3.12"))), y = MeanScore)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = NULL, x = NULL, y = NULL) +  # Set x and y labels to NULL
+  scale_y_continuous(breaks = seq(0, 9, by = 1)) +  # Set y-axis to display whole numbers from 0 to 9
+  theme_minimal() + 
+  theme(axis.text.x = element_text(size = 12),  # Keep x-axis text (variable names)
+        axis.text.y = element_text(size = 12),  # Keep y-axis text (mean scores)
+        axis.title.x = element_text(size = 14),  # Customize x-axis title
+        axis.title.y = element_text(size = 14))  # Customize y-axis title
+```
+**Figure 7** Mean scores for items related to **Digital Self-Efficacy**.
+
+#### Sub construct 4: Socio-Digital Norms
+
+The distribution of digital skills scores reveals critical insights into the **varying levels of digital competency** among participants. Notably, the higher scores in **Items 01** and **05** indicate strong proficiency in basic digital tasks, while lower scores in **Items 10** and **12** highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.
+
+```{r, echo=FALSE}
+# Step 1: Calculate mean scores for the variables of interest with descriptive names
+mean_scores <- data %>%
+  summarise(
+    "Item 4.1" = mean(sdn_01, na.rm = TRUE),
+    "Item 4.2" = mean(sdn_02, na.rm = TRUE),
+    "Item 4.3" = mean(sdn_03, na.rm = TRUE),
+    "Item 4.4" = mean(sdn_04, na.rm = TRUE),
+    "Item 4.5" = mean(sdn_05, na.rm = TRUE),
+    "Item 4.6" = mean(sdn_06, na.rm = TRUE),
+    "Item 4.7" = mean(sdn_07, na.rm = TRUE),
+    "Item 4.8" = mean(sdn_08, na.rm = TRUE),
+    "Item 4.9" = mean(sdn_09, na.rm = TRUE),
+    "Item 4.10" = mean(sdn_10, na.rm = TRUE),
+    "Item 4.11" = mean(sdn_11, na.rm = TRUE),
+    "Item 4.12" = mean(sdn_12, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "MeanScore")  # Reshape data
+
+# Step 3: Create the horizontal bar chart for mean scores in reversed order
+ggplot(mean_scores, aes(x = factor(Variable, levels = rev(c("Item 4.1", "Item 4.2", "Item 4.3", "Item 4.4", "Item 4.5", "Item 4.6", "Item 4.7", "Item 4.8", "Item 4.9", "Item 4.10", "Item 4.11", "Item 4.12"))), y = MeanScore)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = NULL, x = NULL, y = NULL) +  # Set x and y labels to NULL
+  scale_y_continuous(breaks = seq(0, 9, by = 1)) +  # Set y-axis to display whole numbers from 0 to 9
+  theme_minimal() + 
+  theme(axis.text.x = element_text(size = 12),  # Keep x-axis text (variable names)
+        axis.text.y = element_text(size = 12),  # Keep y-axis text (mean scores)
+        axis.title.x = element_text(size = 14),  # Customize x-axis title
+        axis.title.y = element_text(size = 14))  # Customize y-axis title
+```
+**Figure 8** Mean scores for items related to **Socio-Digital Norms**.
+
+#### Sub construct 5: Digital Outcome Expectancy
+
+The distribution of digital skills scores reveals critical insights into the **varying levels of digital competency** among participants. Notably, the higher scores in **Items 01** and **05** indicate strong proficiency in basic digital tasks, while lower scores in **Items 10** and **12** highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.
+
+```{r, echo=FALSE}
+# Step 1: Calculate mean scores for the variables of interest with descriptive names
+mean_scores <- data %>%
+  summarise(
+    "Item 5.1" = mean(doe_01, na.rm = TRUE),
+    "Item 5.2" = mean(doe_02, na.rm = TRUE),
+    "Item 5.3" = mean(doe_03, na.rm = TRUE),
+    "Item 5.4" = mean(doe_04, na.rm = TRUE),
+    "Item 5.5" = mean(doe_05, na.rm = TRUE),
+    "Item 5.6" = mean(doe_06, na.rm = TRUE),
+    "Item 5.7" = mean(doe_07, na.rm = TRUE),
+    "Item 5.8" = mean(doe_08, na.rm = TRUE),
+    "Item 5.9" = mean(doe_09, na.rm = TRUE),
+    "Item 5.10" = mean(doe_10, na.rm = TRUE),
+    "Item 5.11" = mean(doe_11, na.rm = TRUE),
+    "Item 5.12" = mean(doe_12, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "MeanScore")  # Reshape data
+
+# Step 3: Create the horizontal bar chart for mean scores in reversed order
+ggplot(mean_scores, aes(x = factor(Variable, levels = rev(c("Item 5.1", "Item 5.2", "Item 5.3", "Item 5.4", "Item 5.5", "Item 5.6", "Item 5.7", "Item 5.8", "Item 5.9", "Item 5.10", "Item 5.11", "Item 5.12"))), y = MeanScore)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = NULL, x = NULL, y = NULL) +  # Set x and y labels to NULL
+  scale_y_continuous(breaks = seq(0, 9, by = 1)) +  # Set y-axis to display whole numbers from 0 to 9
+  theme_minimal() + 
+  theme(axis.text.x = element_text(size = 12),  # Keep x-axis text (variable names)
+        axis.text.y = element_text(size = 12),  # Keep y-axis text (mean scores)
+        axis.title.x = element_text(size = 14),  # Customize x-axis title
+        axis.title.y = element_text(size = 14))  # Customize y-axis title
+```
+**Figure 9** Mean scores for items related to **Digital Outcome Expectancy**.
+
+#### Sub construct 6: Digital Trust
+
+The distribution of digital skills scores reveals critical insights into the **varying levels of digital competency** among participants. Notably, the higher scores in **Items 01** and **05** indicate strong proficiency in basic digital tasks, while lower scores in **Items 10** and **12** highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.
+
+```{r, echo=FALSE}
+# Step 1: Calculate mean scores for the variables of interest with descriptive names
+mean_scores <- data %>%
+  summarise(
+    "Item 6.1" = mean(dtr_01, na.rm = TRUE),
+    "Item 6.2" = mean(dtr_02, na.rm = TRUE),
+    "Item 6.3" = mean(dtr_03, na.rm = TRUE),
+    "Item 6.4" = mean(dtr_04, na.rm = TRUE),
+    "Item 6.5" = mean(dtr_05, na.rm = TRUE),
+    "Item 6.6" = mean(dtr_06, na.rm = TRUE),
+    "Item 6.7" = mean(dtr_07, na.rm = TRUE),
+    "Item 6.8" = mean(dtr_08, na.rm = TRUE),
+    "Item 6.9" = mean(dtr_09, na.rm = TRUE),
+    "Item 6.10" = mean(dtr_10, na.rm = TRUE),
+    "Item 6.11" = mean(dtr_11, na.rm = TRUE),
+    "Item 6.12" = mean(dtr_12, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "MeanScore")  # Reshape data
+
+# Step 3: Create the horizontal bar chart for mean scores in reversed order
+ggplot(mean_scores, aes(x = factor(Variable, levels = rev(c("Item 6.1", "Item 6.2", "Item 6.3", "Item 6.4", "Item 6.5", "Item 6.6", "Item 6.7", "Item 6.8", "Item 6.9", "Item 6.10", "Item 6.11", "Item 6.12"))), y = MeanScore)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = NULL, x = NULL, y = NULL) +  # Set x and y labels to NULL
+  scale_y_continuous(breaks = seq(0, 9, by = 1)) +  # Set y-axis to display whole numbers from 0 to 9
+  theme_minimal() + 
+  theme(axis.text.x = element_text(size = 12),  # Keep x-axis text (variable names)
+        axis.text.y = element_text(size = 12),  # Keep y-axis text (mean scores)
+        axis.title.x = element_text(size = 14),  # Customize x-axis title
+        axis.title.y = element_text(size = 14))  # Customize y-axis title
+```
+**Figure 10** Mean scores for items related to **Digital Trust**.
+
+#### Sub construct 7: Digital Behavioural Regulation
+
+The distribution of digital skills scores reveals critical insights into the **varying levels of digital competency** among participants. Notably, the higher scores in **Items 01** and **05** indicate strong proficiency in basic digital tasks, while lower scores in **Items 10** and **12** highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.
+
+```{r, echo=FALSE}
+# Step 1: Calculate mean scores for the variables of interest with descriptive names
+mean_scores <- data %>%
+  summarise(
+    "Item 7.1" = mean(dbr_01, na.rm = TRUE),
+    "Item 7.2" = mean(dbr_02, na.rm = TRUE),
+    "Item 7.3" = mean(dbr_03, na.rm = TRUE),
+    "Item 7.4" = mean(dbr_04, na.rm = TRUE),
+    "Item 7.5" = mean(dbr_05, na.rm = TRUE),
+    "Item 7.6" = mean(dbr_06, na.rm = TRUE),
+    "Item 7.7" = mean(dbr_07, na.rm = TRUE),
+    "Item 7.8" = mean(dbr_08, na.rm = TRUE),
+    "Item 7.9" = mean(dbr_09, na.rm = TRUE),
+    "Item 7.10" = mean(dbr_10, na.rm = TRUE),
+    "Item 7.11" = mean(dbr_11, na.rm = TRUE),
+    "Item 7.12" = mean(dbr_12, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "MeanScore")  # Reshape data
+
+# Step 3: Create the horizontal bar chart for mean scores in reversed order
+ggplot(mean_scores, aes(x = factor(Variable, levels = rev(c("Item 7.1", "Item 7.2", "Item 7.3", "Item 7.4", "Item 7.5", "Item 7.6", "Item 7.7", "Item 7.8", "Item 7.9", "Item 7.10", "Item 7.11", "Item 7.12"))), y = MeanScore)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flips the chart to horizontal
+  labs(title = NULL, x = NULL, y = NULL) +  # Set x and y labels to NULL
+  scale_y_continuous(breaks = seq(0, 9, by = 1)) +  # Set y-axis to display whole numbers from 0 to 9
+  theme_minimal() + 
+  theme(axis.text.x = element_text(size = 12),  # Keep x-axis text (variable names)
+        axis.text.y = element_text(size = 12),  # Keep y-axis text (mean scores)
+        axis.title.x = element_text(size = 14),  # Customize x-axis title
+        axis.title.y = element_text(size = 14))  # Customize y-axis title
+```
+**Figure 11** Mean scores for items related to **Digital Behavioural Regulation**.
+
+## 2.Non-response Bias Check (Mann-Whitney U Test)
+
+::: callout-note
+**Purpose** To assess if there are significant differences between early and late respondents, thereby checking for non-response bias.If the Mann-Whitney U test does not show significant differences, non-response bias is likely minimal.
+:::
+
+### Procedure
+
+Divide respondents into early responders and late responders based on submission time. Perform the Mann-Whitney U test to compare these groups across key item ratings or total scores.
+
+### Variables
+
+Total or individual item scores from various domains (e.g., digital competencies, digital health literacy).
+
+## 3. Round 1 Analysis: Consensus Measurement
+
+::: callout-note
+Purpose Assess the level of agreement among experts on the relevance of each item.
+:::
+
+### Methods
+
+-   **Descriptive statistics**: Report median and interquartile range (IQR) for each item on the 0-9 scale.
+-   **Define a consensus threshold**: Items with a median rating ≥ 7 and IQR ≤ 2 are considered to have reached consensus.
+-   **Qualitative comments**: Participants' suggestions will be analysed (details below) to inform potential item revisions.
+
+## 4. Qualitative Analysis (Content and Syntax)
+
+### 4.1 Content Analysis
+
+::: callout-note
+**Purpose** To systematically analyse the free-text comments for themes, suggestions, and critiques related to the items.
+:::
+
+#### Steps
+
+1.  **Data familiarisation**: Read all comments for each domain (e.g., digital competencies, digital health literacy).
+2.  **Initial coding**: Develop a coding framework based on recurring themes such as wording suggestions, missing constructs, or relevance concerns. Example: If several participants suggest revising "I can download and install apps," this might be coded as "wording suggestions."
+3.  **Thematic analysis**: Group codes into broader themes such as clarity of items, real-world applicability, or overlapping constructs. Highlight common patterns and concerns to guide item revision.
+4.  **Frequency analysis**: Count occurrences of each theme to identify key areas for revision (e.g., frequent comments about simplifying certain items).
+5.  **Interpretation**: Use themes to revise items for Round 2, ensuring the tool reflects expert input and clarity in measurement.
+
+### 4.2 Syntax Analysis
+
+::: callout-note
+**Purpose** To examine the structure and tone of the language used in participants' feedback.
+:::
+
+#### Steps
+
+-   **Identify patterns in language use**: Look for frequent words or phrases like "unclear," "confusing," or "easy to understand," indicating the perceived quality of items. Analyse positive/negative valence: Are participants offering more critique or positive reinforcement? **Linguistic markers**: Evaluate the use of modal verbs (e.g., "could," "might") or qualifiers (e.g., "somewhat," "possibly") to gauge participants' confidence or uncertainty. Examine directive language (e.g., "this must change") for strong suggestions.
+-   **Complexity and conciseness**: Assess whether participants provide brief or detailed feedback. Longer feedback may indicate higher engagement or complexity in understanding the item.
+-   **Discourse structure**: Look at the structure of feedback (e.g., critiques followed by solutions) to assess the depth of thought. Combining Content and Syntax Analysis: Synthesising findings: Use content analysis to identify recurring themes and syntax analysis to determine how confidently these themes are expressed. Prioritise changes in areas where both the content and language suggest strong or frequent concerns.
+
+## 5. Revisions for Round 2
+
+::: callout-note
+**Purpose** Refine the measurement tool based on Round 1 analysis.
+:::
+
+#### Methods
+
+-   Retain items that reached consensus.
+-   Revise or remove items that did not reach consensus, based on both qualitative feedback and quantitative measures.
+-   Integrate suggestions from the content analysis to revise item wording or add new items where necessary.
+
+## 6. Post-hoc Comparisons (Optional)
+
+::: callout-note
+Purpose: Explore subgroup differences (e.g., academics vs. public health professionals) to determine if different groups hold varying views on item relevance.
+:::
+
+#### Methods
+
+-   Use the Mann-Whitney U test (for two groups) or Kruskal-Wallis test (for multiple groups) to compare scores across different professional roles or experience levels.
