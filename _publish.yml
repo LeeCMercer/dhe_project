@@ -1,0 +1,4 @@
+- source: delphi_r1_code.qmd
+  quarto-pub:
+    - id: 6963ca76-021c-419f-9e9f-2385bfb2f4fa
+      url: 'https://bkst.quarto.pub/delphi-round-1---interim-report'

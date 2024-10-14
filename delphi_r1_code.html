@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Delphi Round 1 - R Code</title>
+<title>Delphi Round 1 - Interim Report [DUMMY]</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -79,7 +45,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Delphi Round 1 - R Code</h1>
+<h1 class="title">Delphi Round 1 - Interim Report [DUMMY]</h1>
 </div>
 
 
@@ -94,41 +60,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="data-tidying" class="level2">
-<h2 class="anchored" data-anchor-id="data-tidying">0. Data tidying</h2>
-<section id="load-libraries" class="level3">
-<h3 class="anchored" data-anchor-id="load-libraries">Load libraries</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># Load tidyverse</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="contents" class="level2">
+<h2 class="anchored" data-anchor-id="contents">Contents</h2>
+<p><a href="#descriptive-statistics">1. Descriptive Statistics</a><br>
+<a href="#non-response-bias-check">2. Non-response Bias Check</a><br>
+<a href="#consensus-measurement">3. Consensus Measurement</a><br>
+<a href="#qualitative-analysis">4. Qualitative Analysis</a><br>
+<a href="#revisions-for-round-2">5. Revisions for Round 2</a><br>
+<a href="#post-hoc-comparisons">6. Post-hoc Comparisons</a></p>
 </section>
-<section id="load-data" class="level3">
-<h3 class="anchored" data-anchor-id="load-data">Load data</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/raw_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="tidy-data" class="level3">
-<h3 class="anchored" data-anchor-id="tidy-data">Tidy data</h3>
-<section id="recode-values" class="level4">
-<h4 class="anchored" data-anchor-id="recode-values">Recode values</h4>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>edu_att <span class="ot">&lt;-</span> <span class="fu">recode</span>(data<span class="sc">$</span>edu_att,</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"School-level (GCSEs, CSEs, O-Levels, or equivalent)"</span> <span class="ot">=</span> <span class="st">"School level"</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Further education (A-Level, NVQ, Scottish Highers, or equivalent)"</span> <span class="ot">=</span> <span class="st">"Further education"</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Vocational and technical (NVQ Level 1 and 2, BTEC, Apprenticeships, or equivalent)"</span> <span class="ot">=</span> <span class="st">"Vocational and technical"</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Higher education (HNC, HND, Foundational Degree, or equivalent)"</span> <span class="ot">=</span> <span class="st">"Higher education"</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Undergraduate Degree (BA, BSc, BEng, or equivalent)"</span> <span class="ot">=</span> <span class="st">"Undergraduate degree"</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Postgraduate and professional (MA, MSc, MBA, PhD, or equivalent)"</span> <span class="ot">=</span> <span class="st">"Postgraduate and professional"</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-</section>
-</section>
-<section id="initial-descriptive-statistics" class="level2">
-<h2 class="anchored" data-anchor-id="initial-descriptive-statistics">1. Initial Descriptive Statistics</h2>
+<section id="descriptive-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="descriptive-statistics">1. Descriptive Statistics</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -161,199 +103,120 @@ Note
 </ol>
 </section>
 <section id="demographic-report" class="level3">
-<h3 class="anchored" data-anchor-id="demographic-report">Demographic report</h3>
+<h3 class="anchored" data-anchor-id="demographic-report">1.1. Demographic report</h3>
 <section id="gender" class="level4">
-<h4 class="anchored" data-anchor-id="gender">Gender</h4>
+<h4 class="anchored" data-anchor-id="gender">1.1.1. Gender</h4>
+<p>The gender distribution of participants was fairly balanced, with a slight majority identifying as <strong>female</strong>. Additionally, a small but significant portion of participants identified as <strong>non-binary</strong> or <strong>transgender</strong>, reflecting a diverse gender representation in the sample.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(data, gen_grp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     gen_grp n
-1       Male 2
-2 Non-binary 1</code></pre>
+<div class="cell-output-display">
+<p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</section>
+<section id="ethnicity" class="level4">
+<h4 class="anchored" data-anchor-id="ethnicity">1.1.2. Ethnicity</h4>
+<p>The ethnic breakdown of participants revealed a diverse cohort, with the majority identifying as <strong>White British</strong>, followed by smaller proportions from <strong>Black</strong>, <strong>Asian</strong>, and <strong>other</strong> ethnic backgrounds. Notably, participants from minority ethnic groups accounted for nearly <strong>a third</strong> of the total sample, highlighting the varied demographic representation in the study.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Summarize the counts by gender group</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gen_grp) <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())  <span class="co"># Count the frequency of each gender group</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create the horizontal bar chart with whole number labels on the y-axis</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gender_counts, <span class="fu">aes</span>(<span class="at">x =</span> gen_grp, <span class="at">y =</span> Count)) <span class="sc">+</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>  <span class="co"># Flips the chart to horizontal</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Demographic Distribution by Gender Group"</span>, <span class="at">x =</span> <span class="st">"Gender Group"</span>, <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(gender_counts<span class="sc">$</span>Count), <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span>  <span class="co"># Set y-axis to display whole numbers</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="ethnicity" class="level4">
-<h4 class="anchored" data-anchor-id="ethnicity">Ethnicity</h4>
+<section id="educational-attainment" class="level4">
+<h4 class="anchored" data-anchor-id="educational-attainment">1.1.3. Educational attainment</h4>
+<p>The educational attainment of participants showed a broad range, with the largest group holding an <strong>undergraduate degree</strong>, followed by those with <strong>postgraduate</strong> or <strong>professional</strong> qualifications. A notable proportion of participants had <strong>school-level</strong> or <strong>further education</strong> qualifications, while a smaller group reported having no formal qualifications.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(data, eth_grp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                          eth_grp n
-1 Mixed or Multiple Ethnic Groups 1
-2                           Other 1
-3                           White 1</code></pre>
+<div class="cell-output-display">
+<p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</section>
+<section id="employment-sector" class="level4">
+<h4 class="anchored" data-anchor-id="employment-sector">1.1.4. Employment sector</h4>
+<p>The employment sector breakdown revealed a diverse range of occupations, with the majority of participants working in the <strong>public sector</strong>, particularly in education and healthcare. Smaller proportions were employed in the <strong>private sector</strong>, <strong>non-profit organizations</strong>, and <strong>vocational industries</strong>, while a minority reported being <strong>self-employed</strong> or not currently in paid employment.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Summarize the counts by gender group</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(eth_grp) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())  <span class="co"># Count the frequency of each gender group</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create the horizontal bar chart with whole number labels on the y-axis</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gender_counts, <span class="fu">aes</span>(<span class="at">x =</span> eth_grp, <span class="at">y =</span> Count)) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>  <span class="co"># Flips the chart to horizontal</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Demographic Distribution by Ethnic Group"</span>, <span class="at">x =</span> <span class="st">"Ethnic Group"</span>, <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(gender_counts<span class="sc">$</span>Count), <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span>  <span class="co"># Set y-axis to display whole numbers</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="educational-attainment" class="level4">
-<h4 class="anchored" data-anchor-id="educational-attainment">Educational attainment</h4>
+</section>
+<section id="mean-item-scores" class="level3">
+<h3 class="anchored" data-anchor-id="mean-item-scores">1.2. Mean item scores</h3>
+<section id="sub-construct-1-digital-skills" class="level4">
+<h4 class="anchored" data-anchor-id="sub-construct-1-digital-skills">1.2.1. Sub-construct 1: Digital Skills</h4>
+<p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(data, edu_att)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                   edu_att n
-1        Further education 1
-2     Undergraduate degree 1
-3 Vocational and technical 1</code></pre>
+<div class="cell-output-display">
+<p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p><strong>Figure 5</strong> Mean scores for items related to <strong>Digital Skills</strong>.</p>
+</section>
+<section id="sub-construct-2-digital-health-literacy" class="level4">
+<h4 class="anchored" data-anchor-id="sub-construct-2-digital-health-literacy">1.2.2 Sub-construct 2: Digital Health Literacy</h4>
+<p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Summarize the counts by gender group</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(edu_att) <span class="sc">%&gt;%</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())  <span class="co"># Count the frequency of each gender group</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create the horizontal bar chart with whole number labels on the y-axis</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gender_counts, <span class="fu">aes</span>(<span class="at">x =</span> edu_att, <span class="at">y =</span> Count)) <span class="sc">+</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>  <span class="co"># Flips the chart to horizontal</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Demographic Distribution by Educational Attainment"</span>, <span class="at">x =</span> <span class="st">"Educational Attainment"</span>, <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(gender_counts<span class="sc">$</span>Count), <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span>  <span class="co"># Set y-axis to display whole numbers</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p><strong>Figure 6</strong> Mean scores for items related to <strong>Digital Health Literacy</strong>.</p>
 </section>
-<section id="employment-sector" class="level4">
-<h4 class="anchored" data-anchor-id="employment-sector">Employment sector</h4>
+<section id="sub-construct-3-digital-self-efficacy" class="level4">
+<h4 class="anchored" data-anchor-id="sub-construct-3-digital-self-efficacy">1.2.3. Sub construct 3: Digital Self-Efficacy</h4>
+<p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(data, emp_sec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                     emp_sec n
-1 Allied health professional 1
-2          Charitable sector 1
-3             Private sector 1</code></pre>
+<div class="cell-output-display">
+<p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p><strong>Figure 7</strong> Mean scores for items related to <strong>Digital Self-Efficacy</strong>.</p>
+</section>
+<section id="sub-construct-4-socio-digital-norms" class="level4">
+<h4 class="anchored" data-anchor-id="sub-construct-4-socio-digital-norms">1.2.4. Sub construct 4: Socio-Digital Norms</h4>
+<p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Summarize the counts by gender group</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>gender_counts <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(emp_sec) <span class="sc">%&gt;%</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())  <span class="co"># Count the frequency of each gender group</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create the horizontal bar chart with whole number labels on the y-axis</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gender_counts, <span class="fu">aes</span>(<span class="at">x =</span> emp_sec, <span class="at">y =</span> Count)) <span class="sc">+</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>  <span class="co"># Flips the chart to horizontal</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Demographic Distribution by Employment Type"</span>, <span class="at">x =</span> <span class="st">"Employment Type"</span>, <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(gender_counts<span class="sc">$</span>Count), <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span>  <span class="co"># Set y-axis to display whole numbers</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p><strong>Figure 8</strong> Mean scores for items related to <strong>Socio-Digital Norms</strong>.</p>
 </section>
-</section>
-<section id="mean-item-scores" class="level3">
-<h3 class="anchored" data-anchor-id="mean-item-scores">Mean item scores</h3>
-<section id="sub-construct-1-digital-skills" class="level4">
-<h4 class="anchored" data-anchor-id="sub-construct-1-digital-skills">Sub-construct 1: Digital Skills</h4>
+<section id="sub-construct-5-digital-outcome-expectancy" class="level4">
+<h4 class="anchored" data-anchor-id="sub-construct-5-digital-outcome-expectancy">1.2.5. Sub construct 5: Digital Outcome Expectancy</h4>
 <p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><strong>Figure 5</strong> Mean scores for items related to <strong>Digital Skills</strong>.</p>
+<p><strong>Figure 9</strong> Mean scores for items related to <strong>Digital Outcome Expectancy</strong>.</p>
 </section>
-<section id="sub-construct-2-digital-health-literacy" class="level4">
-<h4 class="anchored" data-anchor-id="sub-construct-2-digital-health-literacy">Sub-construct 2: Digital Health Literacy</h4>
+<section id="sub-construct-6-digital-trust" class="level4">
+<h4 class="anchored" data-anchor-id="sub-construct-6-digital-trust">1.2.6. Sub construct 6: Digital Trust</h4>
 <p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><strong>Figure 6</strong> Mean scores for items related to <strong>Digital Health Literacy</strong>.</p>
+<p><strong>Figure 10</strong> Mean scores for items related to <strong>Digital Trust</strong>.</p>
 </section>
-<section id="sub-construct-3-digital-self-efficacy" class="level4">
-<h4 class="anchored" data-anchor-id="sub-construct-3-digital-self-efficacy">Sub construct 3: Digital Self-Efficacy</h4>
+<section id="sub-construct-7-digital-behavioural-regulation" class="level4">
+<h4 class="anchored" data-anchor-id="sub-construct-7-digital-behavioural-regulation">1.2.7. Sub construct 7: Digital Behavioural Regulation</h4>
 <p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><strong>Figure 7</strong> Mean scores for items related to <strong>Digital self-efficacy</strong>.</p>
-</section>
-<section id="sub-construct-4-socio-digital-norms" class="level4">
-<h4 class="anchored" data-anchor-id="sub-construct-4-socio-digital-norms">Sub construct 4: Socio-Digital Norms</h4>
-<p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p><strong>Figure 8</strong> Mean scores for items related to <strong>Socio-Digital Norms</strong>.</p>
-</section>
-<section id="sub-construct-5-digital-outcome-expectancy" class="level4">
-<h4 class="anchored" data-anchor-id="sub-construct-5-digital-outcome-expectancy">Sub construct 5: Digital Outcome Expectancy</h4>
-<p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p><strong>Figure 9</strong> Mean scores for items related to <strong>Digital Outcome Expectancy</strong>.</p>
-</section>
-<section id="sub-construct-6-digital-trust" class="level4">
-<h4 class="anchored" data-anchor-id="sub-construct-6-digital-trust">Sub construct 6: Digital Trust</h4>
-<p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p><strong>Figure 10</strong> Mean scores for items related to <strong>Digital Trust</strong>.</p>
-</section>
-<section id="sub-construct-7-digital-behavioural-regulation" class="level4">
-<h4 class="anchored" data-anchor-id="sub-construct-7-digital-behavioural-regulation">Sub construct 7: Digital Behavioural Regulation</h4>
-<p>The distribution of digital skills scores reveals critical insights into the <strong>varying levels of digital competency</strong> among participants. Notably, the higher scores in <strong>Items 01</strong> and <strong>05</strong> indicate strong proficiency in basic digital tasks, while lower scores in <strong>Items 10</strong> and <strong>12</strong> highlight areas where individuals struggle, suggesting a need for targeted training and support to bridge the digital divide.</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="delphi_r1_code_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
 <p><strong>Figure 11</strong> Mean scores for items related to <strong>Digital Behavioural Regulation</strong>.</p>
 </section>
 </section>
 </section>
-<section id="non-response-bias-check-mann-whitney-u-test" class="level2">
-<h2 class="anchored" data-anchor-id="non-response-bias-check-mann-whitney-u-test">2.Non-response Bias Check (Mann-Whitney U Test)</h2>
+<section id="non-response-bias-check" class="level2">
+<h2 class="anchored" data-anchor-id="non-response-bias-check">2. Non-response Bias Check</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -364,7 +227,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Purpose</strong> To assess if there are significant differences between early and late respondents, thereby checking for non-response bias.If the Mann-Whitney U test does not show significant differences, non-response bias is likely minimal.</p>
+<p><strong>Purpose</strong> To assess if there are significant differences between early and late respondents, thereby checking for non-response bias. If the <strong>Mann-Whitney U</strong> test does not show significant differences, non-response bias is likely minimal.</p>
 </div>
 </div>
 <section id="procedure" class="level3">
@@ -376,8 +239,8 @@ Note
 <p>Total or individual item scores from various domains (e.g., digital competencies, digital health literacy).</p>
 </section>
 </section>
-<section id="round-1-analysis-consensus-measurement" class="level2">
-<h2 class="anchored" data-anchor-id="round-1-analysis-consensus-measurement">3. Round 1 Analysis: Consensus Measurement</h2>
+<section id="consensus-measurement" class="level2">
+<h2 class="anchored" data-anchor-id="consensus-measurement">3. Consensus Measurement</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -388,7 +251,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Purpose Assess the level of agreement among experts on the relevance of each item.</p>
+<p><strong>Purpose</strong> To assess the level of agreement among experts on the relevance of each item.</p>
 </div>
 </div>
 <section id="methods-1" class="level3">
@@ -400,8 +263,8 @@ Note
 </ul>
 </section>
 </section>
-<section id="qualitative-analysis-content-and-syntax" class="level2">
-<h2 class="anchored" data-anchor-id="qualitative-analysis-content-and-syntax">4. Qualitative Analysis (Content and Syntax)</h2>
+<section id="qualitative-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="qualitative-analysis">4. Qualitative Analysis</h2>
 <section id="content-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="content-analysis">4.1 Content Analysis</h3>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -465,7 +328,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Purpose</strong> Refine the measurement tool based on Round 1 analysis.</p>
+<p><strong>Purpose</strong> To refine the measurement tool based on Round 1 analysis.</p>
 </div>
 </div>
 <section id="methods-2" class="level4">
@@ -477,8 +340,8 @@ Note
 </ul>
 </section>
 </section>
-<section id="post-hoc-comparisons-optional" class="level2">
-<h2 class="anchored" data-anchor-id="post-hoc-comparisons-optional">6. Post-hoc Comparisons (Optional)</h2>
+<section id="post-hoc-comparisons" class="level2">
+<h2 class="anchored" data-anchor-id="post-hoc-comparisons">6. Post-hoc Comparisons</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -489,7 +352,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Purpose: Explore subgroup differences (e.g., academics vs.&nbsp;public health professionals) to determine if different groups hold varying views on item relevance.</p>
+<p>Purpose To explore subgroup differences (e.g., academics vs.&nbsp;public health professionals) to determine if different groups hold varying views on item relevance.</p>
 </div>
 </div>
 <section id="methods-3" class="level4">
